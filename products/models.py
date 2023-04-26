@@ -8,7 +8,9 @@ class Category(models.Model):
         verbose_name_plural = 'Categories'
 
     name = models.CharField(max_length=254)
-    friendly_name = models.CharField(max_length=254, null=True, blank=True)
+    friendly_name = models.CharField(max_length=254,
+                                     null=True,
+                                     blank=True)
 
     def __str__(self):
         return self.name
@@ -52,7 +54,9 @@ class BookGenre(models.Model):
     class Meta:
         verbose_name_plural = 'Genres'
 
-    parent = models.ForeignKey('Category', on_delete)
+    parent_category = models.ForeignKey('Category',
+                                        null=True,
+                                        on_delete=models.SET_NULL)
     name = models.CharField(max_length=254)
     friendly_name = models.CharField(max_length=254, null=True, blank=True)
 
@@ -64,12 +68,15 @@ class BookGenre(models.Model):
 
 
 # Sourced from Code Institute https://codeinstitute.net/global/
-class ElectronicCategory(models.Model):
+class ElectronicSubCategory(models.Model):
 
     class Meta:
         verbose_name_plural = 'Electronics'
 
-    parent = models.ForeignKey('Category', on_delete=models.SET_NULL)
+    parent = models.ForeignKey('Category',
+                               null=True,
+                               blank=True,
+                               on_delete=models.SET_NULL)
     name = models.CharField(max_length=254)
     friendly_name = models.CharField(max_length=254, null=True, blank=True)
 
@@ -106,10 +113,10 @@ class Electronics(Product):
     class Meta:
         abstract = True
 
-    electronics_category = models.ForeignKey('ElectronicCategory',
-                                             null=True,
-                                             blank=True,
-                                             on_delete=models.SET_NULL)
+    parent_category = models.ForeignKey('ElectronicSubCategory',
+                                        null=True,
+                                        blank=True,
+                                        on_delete=models.SET_NULL)
     brand = models.CharField(max_length=254)
     manufacturer_sku = models.CharField(max_length=254)
     additional_features = models.TextField(max_length=1024)
@@ -120,10 +127,6 @@ class Computer(Electronics):
     class Meta:
         abstract = True
 
-    parent_category = models.ForeignKey('Category',
-                                        null=True,
-                                        blank=True,
-                                        on_delete=models.SET_NULL)
     cpu = models.CharField(max_length=254,
                            null=True,
                            blank=True)
@@ -157,22 +160,24 @@ class Laptop(Computer, HasScreen):
 
 
 class Tablet(Laptop):
-    has_sim = 
+    has_sim = models.BooleanField(default=False)
 
 
 class Phone(Computer, HasScreen):
     '''
     Inherits Computer and HasScreen, add camera options
     '''
-    back_camera = models.CharfieldField(null=True,
-                                        blank=True)
-    front_camera = models.CharfieldField(null=True,
-                                         blank=True)
+    back_camera = models.CharField(max_length=254,
+                                   null=True,
+                                   blank=True)
+    front_camera = models.CharField(max_length=254,
+                                    null=True,
+                                    blank=True)
 
 
 class HeadPhones(Electronics):
     '''
-    Inherits Electronics class and adds relevant fields specific to audio.
+    Inherits Electronics class and adds relevant fields specific to headphones.
     '''
     IN_EAR = "In Ear"
     OVER_EAR = "Over Ear"
