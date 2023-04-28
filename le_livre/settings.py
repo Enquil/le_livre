@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!lmabmzj6!ei&(gb!9mh1dj-(*&8ram0*p5bf%##k*c0tz-x7n'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -106,7 +106,7 @@ WSGI_APPLICATION = 'le_livre.wsgi.application'
 
 if 'DATABASE_URL' in os.environ:
     DATABASES = {
-     'default': dj_database_url.parse('postgres://xajmbojf:geCf8QUhMn4fzrjPtdXL5mqSXUCydQQI@snuffleupagus.db.elephantsql.com/xajmbojf')
+     'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
     }
 else:
     DATABASES = {
