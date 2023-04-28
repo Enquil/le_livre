@@ -11,8 +11,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+
 import os
 import dj_database_url
+if os.path.isfile("env.py"):
+    import env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +30,7 @@ SECRET_KEY = 'django-insecure-!lmabmzj6!ei&(gb!9mh1dj-(*&8ram0*p5bf%##k*c0tz-x7n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://le-livre.herokuapp.com/', 'localhost']
 
 
 # Application definition
@@ -101,13 +104,21 @@ WSGI_APPLICATION = 'le_livre.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if 'DATABASE_URL' in os.environ:
+    DATABASES = {
+     'default': dj_database_url.parse('postgres://xajmbojf:geCf8QUhMn4fzrjPtdXL5mqSXUCydQQI@snuffleupagus.db.elephantsql.com/xajmbojf')
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
+# DATABASES = {
+#      'default': dj_database_url.parse('postgres://xajmbojf:geCf8QUhMn4fzrjPtdXL5mqSXUCydQQI@snuffleupagus.db.elephantsql.com/xajmbojf')
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

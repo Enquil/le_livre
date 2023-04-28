@@ -1,0 +1,1 @@
+web: gunicorn le-livre.wsgi:application
