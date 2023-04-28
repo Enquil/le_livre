@@ -1,1 +1,1 @@
-web: gunicorn le-livre.wsgi:application
+web: gunicorn le_livre.wsgi:application
